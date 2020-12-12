@@ -12,6 +12,7 @@ $list_jsons = scandir($json_dir);
 $json_total = count($list_jsons);
 $failure = 0;
 $processed = 0;
+$progress_prev = 0;
 
 foreach ($list_jsons as $json_index => $json) {
   if ($json == '.' || $json == '..' || $json == '.DS_Store') {
@@ -23,7 +24,12 @@ foreach ($list_jsons as $json_index => $json) {
   }
   $jsonStr = str_replace("'", "&quot;", $jsonStr);
   $progress = round(100 * ($json_index/$json_total));
-  echo 'Processing: ' . $json . ' (' . $progress . "%)\n";
+  if ($progress != $progress_prev) {
+      $progress_prev = $progress;
+      echo '... ' . $progress . "%\n";
+  }
+
+  echo 'Processing: ' . $json . "\n";
   $processed++;
   $curl_result = post_json_drupal($jsonStr, $json, $settings['api_url'], $settings['user'], $settings['pass']);
   if (!$curl_result) {

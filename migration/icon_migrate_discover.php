@@ -57,9 +57,6 @@ function _file_save_json(&$pages_json) {
 
 /**
  * Crawl pages recursively.
- * @param  string $url   http://localdemo.dd:8083/index.html
- * @param  number $depth 3  // How deep to crawl the website.
- * @return void
  */
 function _crawl_page($path) {
     global $processed_pages;
@@ -80,14 +77,7 @@ function _crawl_page($path) {
 }
 
 /**
- * Parse HTML between <div> Main Contents Only</div>.
- * <div id="homepub">...</div>
- * <div id="procright">...</div>
- * <div id="rightcol">...</div>
- * <div class="pub">...</div>
- * @param  string $url   https://localsite.dd/index.html
- * @param  number $depth 3
- * @return void
+ * Parse HTML between <div id="your_id_here">Your content</div>.
  */
 function parse_webpage_content($path, &$pages_json, &$doc) {
     global $queries;
@@ -105,7 +95,6 @@ function parse_webpage_content($path, &$pages_json, &$doc) {
     }
 
     $url_alias = str_replace($removes, '', $path);
-    $url_alias = str_replace('/index', '/', $url_alias);
 
     print "Processing: $path --> $url_alias\n";
 
@@ -127,6 +116,9 @@ function parse_webpage_content($path, &$pages_json, &$doc) {
                 $html_body = $doc->saveHTML($node);
                 $html_body = html_body_clean($html_body, $url_alias);
                 $termID = get_term_id($url_alias);
+
+                // Handle situation such as /foo/bar/index.html and make the alias simply /foo/bar
+                $url_alias = str_replace('/index', '/', $url_alias);
 
                 $pages_json[] = [
                     '_links' => ['type' => ['href' => DRUPAL_REST_LINK_HREF]],
@@ -246,6 +238,9 @@ function get_elements(&$html_body_dom, &$content, $tag, $attribut, $url_alias) {
                         if (file_exists(BASE_PATH.$url_alias.'/'.$file_ref)) {
                             $file_links[] = $file_ref;
                             $file_links_new[] = DRUPAL_FILE_URL.$url_alias.'/'.$file_ref;
+                        } else if (file_exists(BASE_PATH.$current_page_url_alias.'/'.$file_ref)) {
+                            $file_links[] = $file_ref;
+                            $file_links_new[] = DRUPAL_FILE_URL.$current_page_url_alias.'/'.$file_ref;
                         }
                     }
                 }
