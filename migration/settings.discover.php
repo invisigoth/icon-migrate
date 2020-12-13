@@ -10,8 +10,6 @@ define('DRUPAL_IMG_URL', '/sites/default/files/images');
 define('DRUPAL_FILE_URL', '/sites/default/files/documents');
 define('PREFIX', ''); // "//div[@id='content']"
 define('CONTENE_TYPE', 'page');
-
-define('PAGE_QUALIFIER', '.aspx.html');
 define('BASE_PATH', '/Users/jason/Sites/regional-gov-au');
 
 
@@ -26,7 +24,7 @@ $queries = [
   PREFIX . "//div[@id='text']",
 ];
 
-$removes = array('/index', '.html', '.aspx', '.asp', '.php', BASE_PATH);
+$removes = array('.html', '.aspx', '.asp', '.php', BASE_PATH);
 
 // Allowed file extensions in link href
 $file_extensions = ['pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx', 'xlsm'];

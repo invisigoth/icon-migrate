@@ -17,7 +17,7 @@ $iterator = new RecursiveIteratorIterator($directory);
 
 foreach ($iterator as $fileinfo) {
     $file_path = $fileinfo->getPathname();
-    if (strstr($file_path, PAGE_QUALIFIER) || strstr($file_path, 'index.html')) {
+    if (strstr($file_path, '.aspx.html') || strstr($file_path, 'index.html')) {
         _crawl_page($file_path);
     }
 }
@@ -90,7 +90,7 @@ function parse_webpage_content($path, &$pages_json, &$doc) {
     // - After extensions are removed, if the alias is /foo/bar/index, set it
     //   to /foo/bar
     $url_alias = parse_url($path, PHP_URL_PATH);
-    if (!$url_alias || $url_alias == "/" || $url_alias == '/index.html') {
+    if (!$url_alias || $url_alias == "/") {
         return;
     }
 
@@ -98,9 +98,9 @@ function parse_webpage_content($path, &$pages_json, &$doc) {
 
     print "Processing: $path --> $url_alias\n";
 
-    // print "parse_web: url=$url\n urlAlians=$url_alias\n";
+
     $xpath = new DOMXPath($doc);
-    //print_r($xpath->document);
+
     // $queries var in settings.crawl.php
     foreach ($queries as $query) {
         $result = $xpath->query($query);
@@ -195,7 +195,6 @@ function get_elements(&$html_body_dom, &$content, $tag, $attribut, $url_alias) {
     global $file_extensions;
     global $removes;
 
-
     $current_page_url_alias = $url_alias;
     $url_alias = explode('/', $url_alias);
 
@@ -216,11 +215,11 @@ function get_elements(&$html_body_dom, &$content, $tag, $attribut, $url_alias) {
         if ($tag == 'a') {
             if (!strstr($file_ref, 'http://') && !strstr($file_ref, 'https://')) {
 
-                print "     old: ".$current_page_url_alias.' --- '.$file_ref."\n";
+                // print "     old: ".$current_page_url_alias.' --- '.$file_ref."\n";
 
-                if (strstr($file_ref, PAGE_QUALIFIER) || strstr($file_ref, 'index.html') ) {
+                if (strstr($file_ref, '.aspx.html') || strstr($file_ref, 'index.html') ) {
                     //  1. We will try to re-link internal cross-reference links within the migrated site
-                    //  TODO: we should try to use file_exists to check the source html files
+                    //
                     $file_links[] = $file_ref; // initial value
                     $new_href = str_replace($removes, '', $file_ref); // initial value
                     if (strstr($file_ref, '../')) {
@@ -242,12 +241,17 @@ function get_elements(&$html_body_dom, &$content, $tag, $attribut, $url_alias) {
                         }
                     }
 
-                    if ((substr($current_page_url_alias, -1) != '/') && (substr($new_href, 0,1) != '/')) {
+                    if ((substr($current_page_url_alias, -6) == '/index') && (substr($new_href, 0,1) != '/')) {
+                        $current_page_url_alias = str_replace('/index', '', $current_page_url_alias);
                         $new_href = $current_page_url_alias.'/'.$new_href;
                     }
 
+                    if ((substr($new_href, -6) == '/index')) {
+                        $new_href = str_replace('/index', '', $new_href);
+                    }
+
                     $file_links_new[] = $new_href;
-                    print "     new: ".$new_href."\n";
+                    // print "     new: ".$new_href."\n";
 
                 } else {
                     // 2. We will try to re-link an internal file (document) within the migrated site
@@ -265,14 +269,11 @@ function get_elements(&$html_body_dom, &$content, $tag, $attribut, $url_alias) {
                 }
             }
         } elseif ($tag == 'img') {
-            if (strstr($file_ref,'readspeaker_listen_icon.gif')) {
-                $file_links_new[] = '';
-            } else {
-                if (!strstr($file_ref, 'http://') && !strstr($file_ref, 'https://')) {
-                    if (file_exists(BASE_PATH.$current_page_url_alias.'/'.$file_ref)) {
-                        $file_links[] = $file_ref;
-                        $file_links_new[] = DRUPAL_IMG_URL.$current_page_url_alias.'/'.$file_ref;
-                    }
+            if (!strstr($file_ref, 'http://') && !strstr($file_ref, 'https://')) {
+                $current_page_url_alias = str_replace('/index', '', $current_page_url_alias);
+                if (file_exists(BASE_PATH.$current_page_url_alias.'/'.$file_ref)) {
+                    $file_links[] = $file_ref;
+                    $file_links_new[] = DRUPAL_IMG_URL.$current_page_url_alias.'/'.$file_ref;
                 }
             }
         }
