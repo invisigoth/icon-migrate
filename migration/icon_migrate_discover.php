@@ -215,24 +215,43 @@ function get_elements(&$html_body_dom, &$content, $tag, $attribut, $url_alias) {
         $file_ref = trim($item->getAttribute($attribut));
         if ($tag == 'a') {
             if (!strstr($file_ref, 'http://') && !strstr($file_ref, 'https://')) {
+
+                print "     old: ".$current_page_url_alias.' --- '.$file_ref."\n";
+
                 if (strstr($file_ref, PAGE_QUALIFIER) || strstr($file_ref, 'index.html') ) {
-                    $file_links[] = $file_ref;
-                    // If linking to an interal page
-                    $ref_segments = explode('/', $file_ref);
-                    $current_page_url_segments = explode('/', $current_page_url_alias);
-                    if (is_array($ref_segments)) {
-                        foreach ($ref_segments as $segment_index => $ref_segment) {
-                            if ($ref_segment == '..') {
-                                unset($ref_segments[$segment_index]);
-                                $current_page_url_segments = array_pop($current_page_url_segments);
+                    //  1. We will try to re-link internal cross-reference links within the migrated site
+                    //  TODO: we should try to use file_exists to check the source html files
+                    $file_links[] = $file_ref; // initial value
+                    $new_href = str_replace($removes, '', $file_ref); // initial value
+                    if (strstr($file_ref, '../')) {
+                        $ref_segments = explode('/', $file_ref);
+                        $double_dot_count = array_count_values($ref_segments);
+                        $double_dot_count = $double_dot_count['..'];
+                        if ($double_dot_count > 0) {
+                            $double_dot_count++;
+                            $current_page_url_segments = explode('/', $current_page_url_alias);
+                            $current_page_url_segments_count = count($current_page_url_segments);
+                            for ($i = 1; $i <= $double_dot_count; $i++) {
+                                unset($current_page_url_segments[$current_page_url_segments_count - $i]);
                             }
+                            $file_ref = str_replace('../', '', $file_ref);
+                            $new_href = implode('/', $current_page_url_segments). '/' . $file_ref;
+                        }
+                        if (file_exists(BASE_PATH.$new_href)) {
+                            $new_href = str_replace($removes, '', $new_href);
                         }
                     }
-                    $new_href = implode('/', $current_page_url_segments). '/' . implode('/', $ref_segments);
-                    $new_href = str_replace($removes, '', $new_href);
+
+                    if ((substr($current_page_url_alias, -1) != '/') && (substr($new_href, 0,1) != '/')) {
+                        $new_href = $current_page_url_alias.'/'.$new_href;
+                    }
+
                     $file_links_new[] = $new_href;
+                    print "     new: ".$new_href."\n";
+
                 } else {
-                    // If linking to an internal file (document)
+                    // 2. We will try to re-link an internal file (document) within the migrated site
+                    //
                     $href_extension = end(explode('.', $file_ref));
                     if (in_array(strtolower($href_extension), $file_extensions)) {
                         if (file_exists(BASE_PATH.$url_alias.'/'.$file_ref)) {
@@ -244,19 +263,11 @@ function get_elements(&$html_body_dom, &$content, $tag, $attribut, $url_alias) {
                         }
                     }
                 }
-
-
             }
         } elseif ($tag == 'img') {
             if (strstr($file_ref,'readspeaker_listen_icon.gif')) {
                 $file_links_new[] = '';
             } else {
-                /*
-                print "\n".$file_ref;
-                print "\n".BASE_PATH.$current_page_url_alias.'/'.$file_ref;
-                print "\n".$current_page_url_alias."\n";
-                exit();
-                */
                 if (!strstr($file_ref, 'http://') && !strstr($file_ref, 'https://')) {
                     if (file_exists(BASE_PATH.$current_page_url_alias.'/'.$file_ref)) {
                         $file_links[] = $file_ref;
