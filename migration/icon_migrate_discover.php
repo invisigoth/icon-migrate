@@ -253,8 +253,12 @@ function get_elements(&$html_body_dom, &$content, $tag, $attribut, $url_alias) {
                         $new_href = str_replace('/index', '', $new_href);
                     }
 
+                    if (strstr($new_href,'/index.aspx.html')) {
+                        $new_href = str_replace('/index.aspx.html', '', $new_href);
+                    }
+
                     $file_links_new[] = $new_href;
-                    // print "     new: ".$new_href."\n";
+                    // print "     new: ".$current_page_url_alias.' --- '.$new_href."\n";
 
                 } else {
                     // 2. We will try to re-link an internal file (document) within the migrated site
