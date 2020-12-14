@@ -195,7 +195,7 @@ function get_elements(&$html_body_dom, &$content, $tag, $attribut, $url_alias) {
     global $file_extensions;
     global $removes;
 
-    $current_page_url_alias = $url_alias;
+    $unaltered_url_alias = $url_alias;
     $url_alias = explode('/', $url_alias);
 
     if (is_array($url_alias)) {
@@ -212,6 +212,8 @@ function get_elements(&$html_body_dom, &$content, $tag, $attribut, $url_alias) {
 
     foreach ($items as $item_index => $item) {
         $file_ref = trim($item->getAttribute($attribut));
+        $current_page_url_alias = $unaltered_url_alias; // Make sure we use the correct url alias in every iteration
+
         if ($tag == 'a') {
             if (!strstr($file_ref, 'http://') && !strstr($file_ref, 'https://')) {
 
@@ -242,6 +244,7 @@ function get_elements(&$html_body_dom, &$content, $tag, $attribut, $url_alias) {
                     }
 
                     if ((substr($current_page_url_alias, -6) == '/index') && (substr($new_href, 0,1) != '/')) {
+                        // TODO: protect $current_page_url_alias so it stays the same for all links on the given page
                         $current_page_url_alias = str_replace('/index', '', $current_page_url_alias);
                         $new_href = $current_page_url_alias.'/'.$new_href;
                     }
