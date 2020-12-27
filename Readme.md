@@ -23,6 +23,6 @@ There are two PHP scripts to run: ```icon_migrate_discover.php``` and ```icon_mi
 
 These scripts will require the settings files configured properly before doing their jobs.
 
-After the correct settings are provided, run ```php -f icon_migrate_discovery.php``` to convert the static HTML archive of the source site into JSON data files that can then be posted to Drupal via Drupal's REST API.
+After the correct settings are provided, run ```php -f icon_migrate_discover.php``` to convert the static HTML archive of the source site into JSON data files that can then be posted to Drupal via Drupal's REST API.
 
 After the JSON data files are prepared, run ```php -dsafe_mode=Off icon_migrate_post.php``` to post the JSON files to Drupal to create the migrated pages  
