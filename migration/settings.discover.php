@@ -10,7 +10,7 @@ define('DRUPAL_IMG_URL', '/sites/default/files/images');
 define('DRUPAL_FILE_URL', '/sites/default/files/documents');
 define('PREFIX', ''); // "//div[@id='content']"
 define('CONTENE_TYPE', 'page');
-define('BASE_PATH', '/Users/jason/Sites/regional-gov-au');
+define('BASE_PATH', '/Users/jason/Downloads/infrastructure-gov-au');
 
 
 // Where the resultant JSON files should be stored. Directory name should include a trailing slash '/'
@@ -34,4 +34,15 @@ $terms_map = [
   '/local' => '2',  // Local Government
   '/regional' => '1', // Regional
   '/territories' => '3', // Territories of Australia
-  ];
+  '/aviation' => '4',
+  '/cities' => '5',
+  '/department' => 6,
+  '/infrastructure' => 7,
+  '/maritime' => 8,
+  '/rail' => 9,
+  '/roads' => 10,
+  'transport' => 11,
+  'utilities' => 12,
+  'vehicles' => 13,
+  'security' => 14
+];
