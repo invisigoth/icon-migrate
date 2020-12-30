@@ -265,10 +265,10 @@ function get_elements(&$html_body_dom, &$content, $tag, $attribut, $url_alias) {
                     //
                     $href_extension = end(explode('.', $file_ref));
                     if (in_array(strtolower($href_extension), $file_extensions)) {
-                        if (file_exists(BASE_PATH.$url_alias.'/'.$file_ref)) {
+                        if (file_exists(BASE_PATH.$url_alias.'/'.urldecode($file_ref))) {
                             $file_links[] = $file_ref;
                             $file_links_new[] = DRUPAL_FILE_URL.$url_alias.'/'.$file_ref;
-                        } else if (file_exists(BASE_PATH.$current_page_url_alias.'/'.$file_ref)) {
+                        } else if (file_exists(BASE_PATH.$current_page_url_alias.'/'.urldecode($file_ref))) {
                             $file_links[] = $file_ref;
                             $file_links_new[] = DRUPAL_FILE_URL.$current_page_url_alias.'/'.$file_ref;
                         }
@@ -276,11 +276,25 @@ function get_elements(&$html_body_dom, &$content, $tag, $attribut, $url_alias) {
                 }
             }
         } elseif ($tag == 'img') {
-            if (!strstr($file_ref, 'http://') && !strstr($file_ref, 'https://')) {
+            if (!strstr($file_ref, 'http://') && !strstr($file_ref, 'https://') && !strstr($file_ref, 'readspeaker_listen_icon')) {
                 $current_page_url_alias = str_replace('/index', '', $current_page_url_alias);
                 if (file_exists(BASE_PATH.$current_page_url_alias.'/'.$file_ref)) {
                     $file_links[] = $file_ref;
                     $file_links_new[] = DRUPAL_IMG_URL.$current_page_url_alias.'/'.$file_ref;
+                } else {
+                  $current_page_url_alias_up_level = $current_page_url_alias;
+                  $current_page_url_alias_up_level_array = explode('/', $current_page_url_alias_up_level);
+                  if (is_array($current_page_url_alias_up_level_array)) {
+                    $current_page_url_alias_up_level = array_pop($current_page_url_alias_up_level_array);
+                    $current_page_url_alias_up_level = implode('/', $current_page_url_alias_up_level_array);
+                    // echo 'Revised base url: '.$current_page_url_alias_up_level."\n";
+                    if (file_exists(BASE_PATH.$current_page_url_alias_up_level.'/'.urldecode($file_ref))) {
+                      $file_links[] = $file_ref;
+                      $file_links_new[] = DRUPAL_IMG_URL.$current_page_url_alias_up_level.'/'.$file_ref;
+                    } else {
+                      echo 'Unable to locate: '.$file_ref."\n";
+                    }
+                  }
                 }
             }
         }
