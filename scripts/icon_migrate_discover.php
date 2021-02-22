@@ -65,7 +65,7 @@ function _crawl_page($path) {
     // Call to generate new content and store data in associat array.
     $dom = new DOMDocument('1.0');
     // We don't want to bother with white spaces.
-    $dom->preserveWhiteSpace = FALSE;
+    $dom->preserveWhiteSpace = TRUE;
     // Most HTML Developers are chimps and produce invalid markup...
     $dom->strictErrorChecking = FALSE;
     $dom->recover = TRUE;
@@ -173,6 +173,15 @@ function get_dom_title(&$dom) {
  * @return string          [html content]
  */
 function html_body_clean($html_body, $url_alias) {
+
+    // $read_speaker_pattern = '/&#160;<a class="attach-doc".+alt="ReadSpeaker".*\/><\/a>/';
+    /* Note: we are currently using Atom to replace the above pattern for better
+     *       performance and realibility. This could be moved into ths PHP
+     *       script but there is no such desire at this stage.
+     * The Atom Regex patter is (simply the PHP patter with no delimiter:
+     *       &#160;<a class="attach-doc".+alt="ReadSpeaker".*\/><\/a>
+     */
+
     // print "/*** urlCur=$urlCur ***/\n";
     $html_body_dom = new DOMDocument();
     // print "#,";

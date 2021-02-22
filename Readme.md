@@ -17,6 +17,10 @@ Those site archiving tools will crawl and make a full static HTML archive of a w
 
 Basic configuration of the Drupal site will be required. An example ```composer.json``` file is provided, which includes the modules those scripts depends on to function properly. In a nutshell, the target Drupal site will need the REST API (create node) enabled.
 
+It is also useful to enable the Devel module as well as the Devel Generate module. This will allow quick delete of all imported nodes for debug purposes
+
+`` drush genc --kill 0 0 ``
+
 ### Running the Icon Migrate scripts
 
 There are two PHP scripts to run: ```icon_migrate_discover.php``` and ```icon_migrate_post.php```.
