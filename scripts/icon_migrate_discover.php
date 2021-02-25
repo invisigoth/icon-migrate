@@ -93,7 +93,8 @@ function parse_webpage_content($path, &$pages_json, &$doc) {
     if (!$url_alias || $url_alias == "/") {
         return;
     }
-
+    ///Users/rajashahzad/Sites/regional-gov-au/index.html
+    $orignal_alias = $url_alias;
     $url_alias = str_replace($removes, '', $path);
 
     print "Processing: $path --> $url_alias\n";
@@ -116,9 +117,13 @@ function parse_webpage_content($path, &$pages_json, &$doc) {
                 $html_body = $doc->saveHTML($node);
                 $html_body = html_body_clean($html_body, $url_alias);
                 $termID = get_term_id($url_alias);
-
                 // Handle situation such as /foo/bar/index.html and make the alias simply /foo/bar
+
                 $url_alias = str_replace('/index', '/', $url_alias);
+                //rewrite path to a new path.
+                $url_alias=get_new_path_for_node($url_alias);
+                //append to the csv file to bulk import for redirects (oldurl -> newurl 301 redirect)
+                append_to_csv_file_for_redirects($orignal_alias,$url_alias);
 
                 $pages_json[] = [
                     '_links' => ['type' => ['href' => DRUPAL_REST_LINK_HREF]],
@@ -153,6 +158,9 @@ function get_term_id($path) {
 
     return $terms_map['default'];
 }
+
+
+  
 
 /**
  * Get the Dom page title.
@@ -313,4 +321,46 @@ function get_elements(&$html_body_dom, &$content, $tag, $attribut, $url_alias) {
         $content = str_replace($file_links, $file_links_new, $content);
     }
     return $content;
+}
+
+
+/**
+ * Get the custom URL from the MAP array().
+ */
+function get_new_path_for_node($old_path) {
+    //echo $old_path; 
+    global $nodes_paths_custom_site2;
+    foreach ($nodes_paths_custom_site2 as $key => $new_custom_path) {
+       //$pos = strpos($mystring, $findme);
+       //echo "find->".$key."&nbsp;&nbsp;in&nbsp;&nbsp;&nbsp;".$old_path."<br/>";
+       $res=strpos($old_path, $key);
+       //echo $new_custom_path.'<br/>';
+       if ($res === false) {
+        // echo "The string '$key' was not found in the string '$old_path'";
+       } else {
+        //echo $key;//if found then replace key with $new_custom_path and return new path
+       return $new_path=str_replace($key,$new_custom_path,$old_path);
+       }
+    }
+
+    return $old_path;
+}
+
+function append_to_csv_file_for_redirects($orignal_alias,$url_alias){
+    $url_alias=get_new_path_for_node($url_alias);
+    //save $orignal_alias & $url_alias in CSV file.
+    //as old_url, new_url
+    $handle = fopen("../csv/old_new_paths_redirect.csv", "a");
+
+    //clean up the url.
+    $modified_alias=str_replace("/Users/rajashahzad/Sites/","",$orignal_alias);
+    $modified_alias=str_replace("/regional-gov-au","",$orignal_alias);
+    $modified_alias=str_replace("/infrastructure-gov-au","",$orignal_alias);
+    $modified_alias=str_replace(".html","",$orignal_alias);
+    $url_alias=ltrim($url_alias, $url_alias[0]);
+    $line = array($modified_alias,$url_alias);
+    if($modified_alias!="" && $url_alias!=""){
+        fputcsv($handle, $line);
+        fclose($handle);
+    }
 }
