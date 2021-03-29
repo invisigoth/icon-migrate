@@ -328,7 +328,6 @@ function get_elements(&$html_body_dom, &$content, $tag, $attribut, $url_alias) {
  * Get the custom URL from the MAP array().
  */
 function get_new_path_for_node($old_path) {
-    //echo $old_path; 
     global $nodes_paths_custom_site2;
     foreach ($nodes_paths_custom_site2 as $key => $new_custom_path) {
        //$pos = strpos($mystring, $findme);
@@ -354,9 +353,9 @@ function append_to_csv_file_for_redirects($orignal_alias,$url_alias){
 
     //clean up the url.
     $modified_alias=str_replace("/Users/rajashahzad/Sites/","",$orignal_alias);
-    $modified_alias=str_replace("/regional-gov-au","",$orignal_alias);
-    $modified_alias=str_replace("/infrastructure-gov-au","",$orignal_alias);
-    $modified_alias=str_replace(".html","",$orignal_alias);
+    $modified_alias=str_replace("/regional-gov-au","",$modified_alias);
+    $modified_alias=str_replace("/infrastructure-gov-au","",$modified_alias);
+    $modified_alias=str_replace(".html","",$modified_alias);
     $url_alias=ltrim($url_alias, $url_alias[0]);
     $line = array($modified_alias,$url_alias);
     if($modified_alias!="" && $url_alias!=""){
