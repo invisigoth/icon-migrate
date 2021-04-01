@@ -4,20 +4,20 @@
  * Settings for icon_migrate_discovery.php
  */
 
-define('DRUPAL_REST_LINK_HREF', 'https://drupal-migrate.local:8890/rest/type/node/page');
-define('LOCAL_DIR', '/Users/rajashahzad/Sites/drupal-migrate-dev');
+define('DRUPAL_REST_LINK_HREF', 'https://govcms-ditrdc.local:8443/rest/type/node/page');
+define('LOCAL_DIR', '/Users/jason/Sites/drupal-migrate');
 define('DRUPAL_IMG_URL', '/sites/default/files/migrated');
 define('DRUPAL_FILE_URL', '/sites/default/files/migrated');
 define('PREFIX', ''); // "//div[@id='content']"
 define('CONTENE_TYPE', 'page');
 
-//define('BASE_PATH', '/Users/rajashahzad/Sites/infrastructure-gov-au');
-define('BASE_PATH', '/Users/rajashahzad/Sites/regional-gov-au');
+//define('BASE_PATH', '/Users/jason/Sites/infrastructure-gov-au');
+define('BASE_PATH', '/Users/jason/Sites/regional-gov-au');
 
 // Where the resultant JSON files should be stored. Directory name should include a trailing slash '/'
-define('JSON_DIR', '/Users/rajashahzad/Sites/icon-migrate-dev/json/');
+define('JSON_DIR', '/Users/jason/Sites/icon-migrate/json/');
 
-$summary_urls_out = '/Users/rajashahzad/Sites/icon-migrate-dev/migration/summary.json';
+$summary_urls_out = '/Users/jason/Sites/icon-migrate/migration/summary.json';
 
 // Define the container tag of the HTML fragment to be migrate
 // For example use "//div[@id='text']" if the container is <div id="text">
@@ -32,20 +32,20 @@ $file_extensions = ['pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx', 'xlsm'];
 
 // Keyword to taxonomy tid mapping
 $terms_map = [
-  '/local' => '2',  // Local Government
-  '/regional' => '1', // Regional
-  '/territories' => '3', // Territories of Australia
-  '/aviation' => '4',
-  '/cities' => '5',
-  '/department' => 6,
-  '/infrastructure' => 7,
-  '/maritime' => 8,
-  '/rail' => 9,
-  '/roads' => 10,
-  'transport' => 11,
-  'utilities' => 12,
-  'vehicles' => 13,
-  'security' => 14
+  '/local' => 10397,  // Local Government
+  '/regional' => 10400, // Regional
+  '/territories' => 10403, // Territories of Australia
+  '/aviation' => 10393,
+  '/cities' => 10394,
+  '/department' => 10395,
+  '/infrastructure' => 10396,
+  '/maritime' => 10398,
+  '/rail' => 10399,
+  '/roads' => 10401,
+  '/transport' => 10404,
+  '/utilities' => 10405,
+  '/vehicles' => 10406,
+  '/security' => 10402
 ];
 //Rewrite node paths for infrastructure.gov.au
 $nodes_paths_custom_site1 = [

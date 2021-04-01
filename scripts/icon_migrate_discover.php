@@ -93,7 +93,7 @@ function parse_webpage_content($path, &$pages_json, &$doc) {
     if (!$url_alias || $url_alias == "/") {
         return;
     }
-    ///Users/rajashahzad/Sites/regional-gov-au/index.html
+
     $orignal_alias = $url_alias;
     $url_alias = str_replace($removes, '', $path);
 
@@ -158,9 +158,6 @@ function get_term_id($path) {
 
     return $terms_map['default'];
 }
-
-
-  
 
 /**
  * Get the Dom page title.
@@ -328,9 +325,17 @@ function get_elements(&$html_body_dom, &$content, $tag, $attribut, $url_alias) {
  * Get the custom URL from the MAP array().
  */
 function get_new_path_for_node($old_path) {
-    //echo $old_path; 
+    //echo $old_path;
+    global $nodes_paths_custom_site1;
     global $nodes_paths_custom_site2;
-    foreach ($nodes_paths_custom_site2 as $key => $new_custom_path) {
+
+    // Infrastructure.gov.au mapping
+    // $nodes_paths_custom_site = $nodes_paths_custom_site1;
+
+    // Regional.gov.au mapping
+    $nodes_paths_custom_site = $nodes_paths_custom_site2;
+
+    foreach ($nodes_paths_custom_site as $key => $new_custom_path) {
        //$pos = strpos($mystring, $findme);
        //echo "find->".$key."&nbsp;&nbsp;in&nbsp;&nbsp;&nbsp;".$old_path."<br/>";
        $res=strpos($old_path, $key);
@@ -353,10 +358,11 @@ function append_to_csv_file_for_redirects($orignal_alias,$url_alias){
     $handle = fopen("../csv/old_new_paths_redirect.csv", "a");
 
     //clean up the url.
-    $modified_alias=str_replace("/Users/rajashahzad/Sites/","",$orignal_alias);
-    $modified_alias=str_replace("/regional-gov-au","",$orignal_alias);
-    $modified_alias=str_replace("/infrastructure-gov-au","",$orignal_alias);
-    $modified_alias=str_replace(".html","",$orignal_alias);
+    $modified_alias=str_replace(
+      array("/Users/jason/Sites/", "/regional-gov-au", "/infrastructure-gov-au", ".html"),
+      "",
+      $orignal_alias
+    );
     $url_alias=ltrim($url_alias, $url_alias[0]);
     $line = array($modified_alias,$url_alias);
     if($modified_alias!="" && $url_alias!=""){
