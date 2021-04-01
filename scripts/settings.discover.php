@@ -4,15 +4,15 @@
  * Settings for icon_migrate_discovery.php
  */
 
-define('DRUPAL_REST_LINK_HREF', 'https://govcms-ditrdc.local:8443/rest/type/node/page');
+define('DRUPAL_REST_LINK_HREF', 'http://govcms-ditrdc.local:88/rest/type/node/simple_content');
 define('LOCAL_DIR', '/Users/jason/Sites/drupal-migrate');
 define('DRUPAL_IMG_URL', '/sites/default/files/migrated');
 define('DRUPAL_FILE_URL', '/sites/default/files/migrated');
 define('PREFIX', ''); // "//div[@id='content']"
-define('CONTENE_TYPE', 'page');
+define('CONTENE_TYPE', 'simple_content');
 
-//define('BASE_PATH', '/Users/jason/Sites/infrastructure-gov-au');
-define('BASE_PATH', '/Users/jason/Sites/regional-gov-au');
+define('BASE_PATH', '/Users/jason/Sites/infrastructure-gov-au');
+//define('BASE_PATH', '/Users/jason/Sites/regional-gov-au');
 
 // Where the resultant JSON files should be stored. Directory name should include a trailing slash '/'
 define('JSON_DIR', '/Users/jason/Sites/icon-migrate/json/');

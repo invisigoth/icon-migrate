@@ -330,10 +330,10 @@ function get_new_path_for_node($old_path) {
     global $nodes_paths_custom_site2;
 
     // Infrastructure.gov.au mapping
-    // $nodes_paths_custom_site = $nodes_paths_custom_site1;
+    $nodes_paths_custom_site = $nodes_paths_custom_site1;
 
     // Regional.gov.au mapping
-    $nodes_paths_custom_site = $nodes_paths_custom_site2;
+    //$nodes_paths_custom_site = $nodes_paths_custom_site2;
 
     foreach ($nodes_paths_custom_site as $key => $new_custom_path) {
        //$pos = strpos($mystring, $findme);
