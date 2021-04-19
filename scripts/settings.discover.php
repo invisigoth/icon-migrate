@@ -4,25 +4,28 @@
  * Settings for icon_migrate_discovery.php
  */
 
-define('DRUPAL_REST_LINK_HREF', 'http://govcms-ditrdc.local:88/rest/type/node/simple_content');
-define('LOCAL_DIR', '/Users/jason/Sites/drupal-migrate');
+define('COMMON_PATH', '/Users/andrewfletcher/Sites');
+define('DRUPAL_REST_LINK_HREF', 'https://frdcbuild.test/rest/type/node/page');
+define('LOCAL_DIR', COMMON_PATH . '/frdcbuild/web');
 define('DRUPAL_IMG_URL', '/sites/default/files/migrated');
 define('DRUPAL_FILE_URL', '/sites/default/files/migrated');
 define('PREFIX', ''); // "//div[@id='content']"
-define('CONTENE_TYPE', 'simple_content');
+define('CONTENT_TYPE', 'page');
+define('LOCAL_MIGRATE_DIR', '/migrate');
+define('LOCAL_DESTINATON_DIR', '/local_dest_dir');
 
-define('BASE_PATH', '/Users/jason/Sites/infrastructure-gov-au');
-//define('BASE_PATH', '/Users/jason/Sites/regional-gov-au');
+define('BASE_PATH', COMMON_PATH . LOCAL_MIGRATE_DIR . LOCAL_DESTINATON_DIR . '/frdc.com.au');
 
 // Where the resultant JSON files should be stored. Directory name should include a trailing slash '/'
-define('JSON_DIR', '/Users/jason/Sites/icon-migrate/json/');
+define('JSON_DIR', COMMON_PATH . LOCAL_MIGRATE_DIR . '/json/');
 
-$summary_urls_out = '/Users/jason/Sites/icon-migrate/migration/summary.json';
+$summary_urls_out = COMMON_PATH . LOCAL_MIGRATE_DIR . '/summary.json';
 
-// Define the container tag of the HTML fragment to be migrate
+// Define the container tag of the HTML fragment to be migrated
 // For example use "//div[@id='text']" if the container is <div id="text">
 $queries = [
   PREFIX . "//div[@id='text']",
+  PREFIX . "//div[@class='col-9']",
 ];
 
 $removes = array('.html', '.aspx', '.asp', '.php', BASE_PATH);

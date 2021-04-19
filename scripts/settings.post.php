@@ -1,7 +1,7 @@
 <?php
 $settings = [
-  'user' => 'admin',
-  'pass' => '1Drupal!@#',
-  'api_url' => 'http://govcms-ditrdc.local:88/node?_format=hal_json',
-  'json_dir' => '/Users/jason/Sites/icon-migrate/json',
+  'user' => 'frdcuser',
+  'pass' => '1Drupal123$',
+  'api_url' => 'https://frdcbuild.test/node?_format=hal_json',
+  'json_dir' => '/Users/andrewfletcher/Sites/migrate/json',
 ];

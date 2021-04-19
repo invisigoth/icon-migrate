@@ -9,7 +9,7 @@ Icon Migrate is a collection of PHP scripts that help developers to migrate any 
 
 In order to migrate a site, Icon Migrate works with other site archiving tools such as *Site Sucker* and *wget*. An example of using wget is provided below:
 
-```wget --mirror --page-requisites --adjust-extension --no-parent --convert-links --directory-prefix=local_dest_dir https://www.aph.gov.au/About_Parliament/Parliamentary_Departments/Department_of_Parliamentary_Services/Publications/Annual_Report_2016-17```
+```wget --mirror --page-requisites --adjust-extension --no-parent --convert-links --directory-prefix=../local_dest_dir https://frdc.com.au```
 
 Those site archiving tools will crawl and make a full static HTML archive of a website with all referenced local files and images. Icon Migrate can then pick up the archived HTML pages, along with the files and images and migrate them into Drupal.
 

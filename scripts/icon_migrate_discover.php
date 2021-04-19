@@ -17,9 +17,9 @@ $iterator = new RecursiveIteratorIterator($directory);
 
 foreach ($iterator as $fileinfo) {
     $file_path = $fileinfo->getPathname();
-    if (strstr($file_path, '.aspx.html') || strstr($file_path, 'index.html')) {
+    // if ( strstr($file_path, '.aspx.html') || strstr($file_path, 'index.html')) {
         _crawl_page($file_path);
-    }
+    // }
 }
 
 file_put_contents($summary_urls_out, json_encode($processed_pages));
@@ -29,7 +29,7 @@ _file_save_json($pages_json);
 // Job summary
 echo "\n==============================================";
 echo "\n== Pages discovered:                     " . count($processed_pages);
-echo "\n== Qualified pages convereted to JSON:   " . count($pages_json);
+echo "\n== Qualified pages converted to JSON:   " . count($pages_json);
 $time_end = microtime(TRUE);
 $execution_time = round(($time_end - $time_start), 2);
 echo "\nTime elapsed: " . $execution_time . " second(s)\n\n";
@@ -46,7 +46,6 @@ function _file_save_json(&$pages_json) {
     foreach ($pages_json as $page_index => $json) {
         $name = "page_$page_index.json";
         $json_data = json_encode($json, JSON_UNESCAPED_SLASHES);
-
         if (!file_put_contents(JSON_DIR . "$name", $json_data)) {
             print "BAD: $name\n";
         }
@@ -62,7 +61,7 @@ function _crawl_page($path) {
     global $processed_pages;
     $processed_pages[$path] = TRUE;
 
-    // Call to generate new content and store data in associat array.
+    // Call to generate new content and store data in associative array.
     $dom = new DOMDocument('1.0');
     // We don't want to bother with white spaces.
     $dom->preserveWhiteSpace = TRUE;
@@ -73,7 +72,6 @@ function _crawl_page($path) {
     @$dom->loadHTMLFile($path);
 
     parse_webpage_content($path, $GLOBALS['pages_json'], $dom);
-
 }
 
 /**
@@ -94,11 +92,10 @@ function parse_webpage_content($path, &$pages_json, &$doc) {
         return;
     }
 
-    $orignal_alias = $url_alias;
+    $original_alias = $url_alias;
     $url_alias = str_replace($removes, '', $path);
 
-    print "Processing: $path --> $url_alias\n";
-
+    // print "Processing: $path --> $url_alias\n";
 
     $xpath = new DOMXPath($doc);
 
@@ -116,22 +113,23 @@ function parse_webpage_content($path, &$pages_json, &$doc) {
                 // print_r($node);
                 $html_body = $doc->saveHTML($node);
                 $html_body = html_body_clean($html_body, $url_alias);
+                // find the relevant taxonomy term
                 $termID = get_term_id($url_alias);
                 // Handle situation such as /foo/bar/index.html and make the alias simply /foo/bar
 
                 $url_alias = str_replace('/index', '/', $url_alias);
                 //rewrite path to a new path.
-                $url_alias=get_new_path_for_node($url_alias);
+                // $url_alias=get_new_path_for_node($url_alias);
                 //append to the csv file to bulk import for redirects (oldurl -> newurl 301 redirect)
-                append_to_csv_file_for_redirects($orignal_alias,$url_alias);
+                // append_to_csv_file_for_redirects($original_alias,$url_alias);
 
                 $pages_json[] = [
                     '_links' => ['type' => ['href' => DRUPAL_REST_LINK_HREF]],
                     'title' => [['value' => $title]],
-                    'type' => [['target_id' => CONTENE_TYPE]],
+                    'type' => [['target_id' => CONTENT_TYPE]],
                     'path' => [['alias' => $url_alias]],
                     'body' => [['value' => $html_body, 'format' => 'full_html']],
-                    'field_topics' => [['target_id' => $termID, 'target_type' => 'taxonomy_term']]
+                    // 'field_topics' => [['target_id' => $termID, 'target_type' => 'taxonomy_term']]
                 ];
             }
         }
@@ -351,17 +349,17 @@ function get_new_path_for_node($old_path) {
     return $old_path;
 }
 
-function append_to_csv_file_for_redirects($orignal_alias,$url_alias){
+function append_to_csv_file_for_redirects($original_alias,$url_alias){
     $url_alias=get_new_path_for_node($url_alias);
-    //save $orignal_alias & $url_alias in CSV file.
+    //save $original_alias & $url_alias in CSV file.
     //as old_url, new_url
     $handle = fopen("../csv/old_new_paths_redirect.csv", "a");
 
     //clean up the url.
     $modified_alias=str_replace(
-      array("/Users/jason/Sites/", "/regional-gov-au", "/infrastructure-gov-au", ".html"),
+      array(COMMON_PATH . "/", "/regional-gov-au", "/infrastructure-gov-au", ".html"),
       "",
-      $orignal_alias
+      $original_alias
     );
     $url_alias=ltrim($url_alias, $url_alias[0]);
     $line = array($modified_alias,$url_alias);
