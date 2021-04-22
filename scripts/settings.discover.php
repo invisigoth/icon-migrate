@@ -51,22 +51,22 @@ $terms_map = [
 $nodes_paths_custom_site1 = [
   "/roads/" => "/infrastructure-transport-vehicles/road-transport-infrastructure/",
   "/transport/programs/" => "/infrastructure-transport-vehicles/road-transport-infrastructure/",
-  "/infrastructure/western_sydney/" => "/infrastructure-transport-vehicles/road-transport-infrastructure/heavy-vehicle -road-reform",
+  "/infrastructure/western_sydney/" => "/infrastructure-transport-vehicles/road-transport-infrastructure/heavy-vehicle-road-reform/",
   "/aviation/"  => "/infrastructure-transport-vehicles/vehicles/aviation/",
-  "/rail/" => "/infrastructure-transport-vehicles/rail",
-  "/maritime/" => "/infrastructure-transport-vehicles/maritime",
-  "/transport/" => "/infrastructure-transport-vehicles/transport-strategy-policy",
-  "/transport/disabilities/" => "/infrastructure-transport-vehicles/transport-accessibility",
-  "/cities/" => "/territories-regions-cities/cities",
-  "https://www.infrastructure.gov.au/cities/" => "/territories-regions-cities",
-  "/vehicles/" => "/infrastructure-transport-vehicles/vehicles",
-  "/water/" => "/infrastructure-transport-vehicles/water",
-  "/infrastructure/ngpd/"=>"/infrastructure-transport-vehicles/project-delivery",
+  "/rail/" => "/infrastructure-transport-vehicles/rail/",
+  "/maritime/" => "/infrastructure-transport-vehicles/maritime/",
+  "/transport/" => "/infrastructure-transport-vehicles/transport-strategy-policy/",
+  "/transport/disabilities/" => "/infrastructure-transport-vehicles/transport-accessibility/",
+  "/cities/" => "/territories-regions-cities/cities/",
+  "https://www.infrastructure.gov.au/cities/" => "/territories-regions-cities/",
+  "/vehicles/" => "/infrastructure-transport-vehicles/vehicles/",
+  "/water/" => "/infrastructure-transport-vehicles/water/",
+  "/infrastructure/ngpd/" => "/infrastructure-transport-vehicles/project-delivery/",
   ];
 //Rewrite node paths for regional.gov.au
 
   $nodes_paths_custom_site2 = [
-  "/regional/"  => "/territories-regions-cities",
-  "/territories/" => "/territories-regions-cities/territories",
-  "/local/" => "/territories-regions-cities/local-government",
+  "/regional/"  => "/territories-regions-cities/",
+  "/territories/" => "/territories-regions-cities/territories/",
+  "/local/" => "/territories-regions-cities/local-government/",
   ];

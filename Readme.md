@@ -9,7 +9,7 @@ Icon Migrate is a collection of PHP scripts that help developers to migrate any 
 
 In order to migrate a site, Icon Migrate works with other site archiving tools such as *Site Sucker* and *wget*. An example of using wget is provided below:
 
-```wget --mirror --page-requisites --adjust-extension --no-parent --convert-links --directory-prefix=local_dest_dir https://www.aph.gov.au/About_Parliament/Parliamentary_Departments/Department_of_Parliamentary_Services/Publications/Annual_Report_2016-17```
+```wget --mirror --page-requisites --adjust-extension --no-parent --convert-links --directory-prefix=local_dest_dir https://example.com```
 
 Those site archiving tools will crawl and make a full static HTML archive of a website with all referenced local files and images. Icon Migrate can then pick up the archived HTML pages, along with the files and images and migrate them into Drupal.
 
@@ -22,6 +22,17 @@ It is also useful to enable the Devel module as well as the Devel Generate modul
 `` drush genc --kill 0 0 ``
 NOTE: If drush command is terminating abnormally and unable to delete the nodes, please drop the database and import again.
 
+### Test the API
+The following curl command can be used to test the API configuration by creating one node.
+```
+curl --insecure \
+  --include \
+  --request POST \
+  --user 'admin:1Drupal!@#' \
+  --header 'Content-type: application/hal+json' \
+  http://govcms-ditrdc.local:88/node?_format=hal_json \
+  --data-binary '{"_links":{"type":{"href":"http://govcms-ditrdc.local:88/rest/type/node/simple_content"}},"title":[{"value":"This is a test"}],"type":[{"target_id":"simple_content"}],"path":[{"alias":"/restful-api-test"}],"body":[{"value":"<p>This is a test</p>","format":"full_html"}],"field_topics":[{"target_id":"10403","target_type":"taxonomy_term"}]}'
+```
 
 ### Running the Icon Migrate scripts
 
@@ -45,3 +56,9 @@ As the script runs, it will create a CSV file in the CSV directory.
 NOTE : Please clear the CSV file before running the script.
 Generated CSV file can be imported easily using https://www.drupal.org/project/path_redirect_import module.
 adjustments should be made in append_to_csv_file_for_redirects().
+
+
+#TODO
+- remove <div id="text"> and it closing </div>, e.g. https://ditrdc-dev.iconinc.com.au/node/23800/edit
+- in <a> tags where it links to a relative path within the site, change the link inside the *href* attribute to match the page in the new IA
+- update the CSV so it does not include the source directory such as 'regional-gov-au'
