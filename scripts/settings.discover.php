@@ -58,7 +58,6 @@ $nodes_paths_custom_site1 = [
   "/transport/" => "/infrastructure-transport-vehicles/transport-strategy-policy/",
   "/transport/disabilities/" => "/infrastructure-transport-vehicles/transport-accessibility/",
   "/cities/" => "/territories-regions-cities/cities/",
-  "https://www.infrastructure.gov.au/cities/" => "/territories-regions-cities/",
   "/vehicles/" => "/infrastructure-transport-vehicles/vehicles/",
   "/water/" => "/infrastructure-transport-vehicles/water/",
   "/infrastructure/ngpd/" => "/infrastructure-transport-vehicles/project-delivery/",
