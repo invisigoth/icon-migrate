@@ -15,6 +15,7 @@ $pages_json = [];
 $directory = new RecursiveDirectoryIterator(BASE_PATH);
 $iterator = new RecursiveIteratorIterator($directory);
 
+clean_csv_file('../csv/old_new_paths_redirect.csv');
 foreach ($iterator as $fileinfo) {
     $file_path = $fileinfo->getPathname();
     if (strstr($file_path, '.aspx.html') || strstr($file_path, 'index.html')) {
@@ -388,4 +389,11 @@ function get_new_path_for_node_2($matches)
         }
     }
     return "<a href=\"" . $matches[1] . "\">";
+}
+
+function clean_csv_file($file_pointer)
+{
+    if (!unlink($file_pointer)) {
+        echo ("$file_pointer cannot be deleted due to an error");
+    }
 }
