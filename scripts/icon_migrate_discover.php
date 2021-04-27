@@ -390,10 +390,3 @@ function get_new_path_for_node_2($matches)
     }
     return "<a href=\"" . $matches[1] . "\">";
 }
-
-function clean_csv_file($file_pointer)
-{
-    if (!unlink($file_pointer)) {
-        echo ("$file_pointer cannot be deleted due to an error");
-    }
-}
