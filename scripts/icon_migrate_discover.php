@@ -124,6 +124,10 @@ function parse_webpage_content($path, &$pages_json, &$doc) {
                 $url_alias=get_new_path_for_node($url_alias);
                 //append to the csv file to bulk import for redirects (oldurl -> newurl 301 redirect)
                 append_to_csv_file_for_redirects($orignal_alias,$url_alias);
+                //clean the <div id="text"> wrapper
+                $html_body = replaceWrapperAndLink($html_body);
+                //map the paths in href's
+                $html_body = preg_replace_callback("/\<a\shref=\"([^\"]*)\"\>/", 'get_new_path_for_node_2', $html_body);
 
                 $pages_json[] = [
                     '_links' => ['type' => ['href' => DRUPAL_REST_LINK_HREF]],
@@ -358,15 +362,30 @@ function append_to_csv_file_for_redirects($orignal_alias,$url_alias){
     $handle = fopen("../csv/old_new_paths_redirect.csv", "a");
 
     //clean up the url.
-    $modified_alias=str_replace(
-      array("/Users/jason/Sites/", "/regional-gov-au", "/infrastructure-gov-au", ".html"),
-      "",
-      $orignal_alias
-    );
+    $modified_alias = str_replace(array("/Users/jason/Sites/", "/regional-gov-au", "/infrastructure-gov-au", "regional-gov-au", "infrastructure-gov-au", ".html"), "", $orignal_alias);
+
     $url_alias=ltrim($url_alias, $url_alias[0]);
     $line = array($modified_alias,$url_alias);
     if($modified_alias!="" && $url_alias!=""){
         fputcsv($handle, $line);
         fclose($handle);
     }
+}
+
+function replaceWrapperAndLink($mycontent)
+{
+    $replacedWrapper = preg_replace("/\<div\sid=\"text\"\>(.*)\<\/div\>/ims", "$1", $mycontent);
+    //$replacedWrapper = preg_replace("/\<a\shref=\"([^\"]*)\"\>(.*)\<\/a\>/ims", "<a href=\"http://$2\">$2</a>", $replacedWrapper);
+    return $replacedWrapper;
+}
+
+function get_new_path_for_node_2($matches)
+{global $nodes_paths_custom_site1;
+    $old_path = $matches[1];
+    foreach ($nodes_paths_custom_site1 as $key => $new_custom_path) {
+        if (strpos($old_path, $key) !== false) {
+            return "<a href=\"" . str_replace($key, $new_custom_path, $old_path) . "\">";
+        }
+    }
+    return "<a href=\"" . $matches[1] . "\">";
 }
