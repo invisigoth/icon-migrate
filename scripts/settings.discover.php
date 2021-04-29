@@ -4,20 +4,18 @@
  * Settings for icon_migrate_discovery.php
  */
 
-define('DRUPAL_REST_LINK_HREF', 'http://govcms-ditrdc.local:88/rest/type/node/simple_content');
+define('DRUPAL_REST_LINK_HREF', 'http://govcms-ditrdc.local:88/rest/type/node/page');
 define('LOCAL_DIR', '/Users/jason/Sites/drupal-migrate');
 define('DRUPAL_IMG_URL', '/sites/default/files/migrated');
 define('DRUPAL_FILE_URL', '/sites/default/files/migrated');
-define('PREFIX', ''); // "//div[@id='content']"
-define('CONTENE_TYPE', 'simple_content');
+define('PREFIX', '');
+define('CONTENE_TYPE', 'page');
 
-define('BASE_PATH', '/Users/jason/Sites/infrastructure-gov-au');
-//define('BASE_PATH', '/Users/jason/Sites/regional-gov-au');
+//define('BASE_PATH', '/Users/jason/Sites/infrastructure-gov-au');
+define('BASE_PATH', '/Users/jason/Sites/regional-gov-au');
 
 // Where the resultant JSON files should be stored. Directory name should include a trailing slash '/'
 define('JSON_DIR', '/Users/jason/Sites/icon-migrate/json/');
-
-$summary_urls_out = '/Users/jason/Sites/icon-migrate/migration/summary.json';
 
 // Define the container tag of the HTML fragment to be migrate
 // For example use "//div[@id='text']" if the container is <div id="text">

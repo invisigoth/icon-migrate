@@ -23,9 +23,7 @@ foreach ($iterator as $fileinfo) {
     }
 }
 
-file_put_contents($summary_urls_out, json_encode($processed_pages));
 _file_save_json($pages_json);
-
 
 // Job summary
 echo "\n==============================================";
@@ -129,7 +127,7 @@ function parse_webpage_content($path, &$pages_json, &$doc) {
                 $html_body = replaceWrapperAndLink($html_body);
                 //map the paths in href's
                 $html_body = preg_replace_callback("/\<a\shref=\"([^\"]*)\"\>/", 'get_new_path_for_node_2', $html_body);
-
+                $html_body = preg_replace('!<img.*?alt=\\"ReadSpeaker\\".*?>!i', '', $html_body);
                 $pages_json[] = [
                     '_links' => ['type' => ['href' => DRUPAL_REST_LINK_HREF]],
                     'title' => [['value' => $title]],
@@ -338,7 +336,7 @@ function get_new_path_for_node($old_path) {
     $nodes_paths_custom_site = $nodes_paths_custom_site1;
 
     // Regional.gov.au mapping
-    //$nodes_paths_custom_site = $nodes_paths_custom_site2;
+    $nodes_paths_custom_site = $nodes_paths_custom_site2;
 
     foreach ($nodes_paths_custom_site as $key => $new_custom_path) {
        //$pos = strpos($mystring, $findme);
@@ -357,7 +355,6 @@ function get_new_path_for_node($old_path) {
 }
 
 function append_to_csv_file_for_redirects($orignal_alias,$url_alias){
-    $url_alias=get_new_path_for_node($url_alias);
     //save $orignal_alias & $url_alias in CSV file.
     //as old_url, new_url
     $handle = fopen("../csv/old_new_paths_redirect.csv", "a");
@@ -380,13 +377,26 @@ function replaceWrapperAndLink($mycontent)
     return $replacedWrapper;
 }
 
-function get_new_path_for_node_2($matches)
-{global $nodes_paths_custom_site1;
+function get_new_path_for_node_2($matches) {
+  global $nodes_paths_custom_site1;
+  global $nodes_paths_custom_site2;
+
+  // Infrastructure.gov.au mapping
+  $nodes_paths_custom_site = $nodes_paths_custom_site1;
+  // Regional.gov.au mapping
+  $nodes_paths_custom_site = $nodes_paths_custom_site2;
     $old_path = $matches[1];
-    foreach ($nodes_paths_custom_site1 as $key => $new_custom_path) {
+    foreach ($nodes_paths_custom_site as $key => $new_custom_path) {
         if (strpos($old_path, $key) !== false) {
             return "<a href=\"" . str_replace($key, $new_custom_path, $old_path) . "\">";
         }
     }
     return "<a href=\"" . $matches[1] . "\">";
+}
+
+function clean_csv_file($file_pointer)
+{
+  if (!unlink($file_pointer)) {
+    echo ("$file_pointer cannot be deleted due to an error");
+  }
 }
