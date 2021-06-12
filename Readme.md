@@ -36,15 +36,28 @@ curl --insecure \
   --data-binary '{"_links":{"type":{"href":"http://govcms-ditrdc.local:88/rest/type/node/simple_content"}},"title":[{"value":"This is a test"}],"type":[{"target_id":"simple_content"}],"path":[{"alias":"/restful-api-test"}],"body":[{"value":"<p>This is a test</p>","format":"full_html"}],"field_topics":[{"target_id":"10403","target_type":"taxonomy_term"}]}'
 ```
 
-### Running the Icon Migrate scripts
-
+### Running the scripts
 There are two PHP scripts to run: ```icon_migrate_discover.php``` and ```icon_migrate_post.php```.
+
+#### Convert HTML to JSON ready to ingest
 
 These scripts will require the settings files configured properly before doing their jobs.
 
 After the correct settings are provided, run ```php -f icon_migrate_discover.php``` to convert the static HTML archive of the source site into JSON data files that can then be posted to Drupal via Drupal's REST API.
 
-After the JSON data files are prepared, run ```php -dsafe_mode=Off icon_migrate_post.php``` to post the JSON files to Drupal to create the migrated pages  
+#### Clean up the JSON files
+
+After the JSON data files are prepared, some cleanups are required.
+1. Search and replace any remaining absolute URL references:
+- Search for ``https://www.infrastructure.gov.au/`` and replace with ``/``
+- Search for ``https://www.regional.gov.au/`` amd replace with ``/``
+2. Fix href with anchor 
+- Search for ``.aspx.html`` and replace with an empty string. This will fix broken anchor links. 
+3. Remove inline CSS adding underlines
+- Search for ``text-decoration: underline;`` and replace it with an empty string
+#### POST the JSON data to Drupal
+ 
+run ```php -dsafe_mode=Off icon_migrate_post.php``` to post the JSON files to Drupal to create the migrated pages  
 
 
 ### Rewrite node paths as needed
@@ -58,9 +71,3 @@ As the script runs, it will create a CSV file in the CSV directory.
 NOTE : Please clear the CSV file before running the script.
 Generated CSV file can be imported easily using https://www.drupal.org/project/path_redirect_import module.
 adjustments should be made in append_to_csv_file_for_redirects().
-
-
-#TODO
-- remove <div id="text"> and it closing </div>, e.g. https://ditrdc-dev.iconinc.com.au/node/23800/edit
-- in <a> tags where it links to a relative path within the site, change the link inside the *href* attribute to match the page in the new IA
-- update the CSV so it does not include the source directory such as 'regional-gov-au'

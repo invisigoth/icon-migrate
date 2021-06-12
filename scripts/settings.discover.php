@@ -11,7 +11,7 @@ define('DRUPAL_FILE_URL', '/sites/default/files/migrated');
 define('PREFIX', '');
 define('CONTENE_TYPE', 'page');
 
-//define('BASE_PATH', '/Users/jason/Sites/infrastructure-gov-au');
+//define('BASE_PATH', '/Users/jason/Sites/www.infrastructure.gov.au');
 define('BASE_PATH', '/Users/jason/Sites/regional-gov-au');
 
 // Where the resultant JSON files should be stored. Directory name should include a trailing slash '/'

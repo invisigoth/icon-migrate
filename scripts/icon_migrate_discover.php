@@ -88,15 +88,26 @@ function parse_webpage_content($path, &$pages_json, &$doc) {
     // - The alias should not contain any file type extensions
     // - After extensions are removed, if the alias is /foo/bar/index, set it
     //   to /foo/bar
+
+    $path_segments = explode('/', $path);
+    $path_segments =end ($path_segments);
+    if ($path_segments == 'index.html') {
+      $alt_index = str_replace('index.html', 'index.aspx.html', $path);
+      if (file_exists($alt_index)) {
+        print "Ignored:    $path --> [$title]\n";
+        return;
+      }
+    }
+
     $url_alias = parse_url($path, PHP_URL_PATH);
     if (!$url_alias || $url_alias == "/") {
-        return;
+      return;
     }
 
     $orignal_alias = $url_alias;
     $url_alias = str_replace($removes, '', $path);
 
-    print "Processing: $path --> $url_alias\n";
+    print "Processing: $path --> $url_alias [$title]\n";
 
 
     $xpath = new DOMXPath($doc);
@@ -333,7 +344,7 @@ function get_new_path_for_node($old_path) {
     global $nodes_paths_custom_site2;
 
     // Infrastructure.gov.au mapping
-    $nodes_paths_custom_site = $nodes_paths_custom_site1;
+    // $nodes_paths_custom_site = $nodes_paths_custom_site1;
 
     // Regional.gov.au mapping
     $nodes_paths_custom_site = $nodes_paths_custom_site2;
@@ -382,7 +393,7 @@ function get_new_path_for_node_2($matches) {
   global $nodes_paths_custom_site2;
 
   // Infrastructure.gov.au mapping
-  $nodes_paths_custom_site = $nodes_paths_custom_site1;
+  //$nodes_paths_custom_site = $nodes_paths_custom_site1;
   // Regional.gov.au mapping
   $nodes_paths_custom_site = $nodes_paths_custom_site2;
     $old_path = $matches[1];
